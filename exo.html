@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>tableau</title>
+    <style>
+        .conteneur{
+            background-color : blue;
+            padding: auto;
+            box-sizing: border-box;
+        }
+        
+        .contenu{
+            display: flex;
+            gap: 10px;
+        }
+        .header{
+            background-color: yellow;
+            height: 60%;
+            margin-bottom: 10%;
+        }
+        .sidebar{
+            background-color: maroon;
+            width: 20%;
+            height: 150px;
+        }
+       
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            background-color: greenyellow;
+            flex: 1;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="conteneur">
+        <div class="header"></div>
+        <div class="contenu">
+            <div class="sidebar"></div>
+            <div class="main"></div>
+        </div>
+    </div>
+</body>
+</html>

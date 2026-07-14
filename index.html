@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon App de Notes</title>
+    <style>
+        /* === STYLE DE L'APPLICATION (CSS) === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Pour que le padding ne dépasse pas la largeur */
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical; /* Permet d'agrandir la zone de texte uniquement de haut en bas */
+            min-height: 100px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .note {
+            background: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+            word-wrap: break-word; /* Évite que les longs mots ne cassent l'affichage */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📝 Mes Notes</h2>
+
+    <input type="text" id="searchBar" placeholder="🔍 Rechercher une note..." onkeyup="rechercherNotes()">
+
+    <textarea id="noteInput" placeholder="Écrivez votre nouvelle note ici..."></textarea>
+    <button onclick="ajouterNote()">Sauvegarder la note</button>
+
+    <div id="notesContainer"></div>
+
+    <script>
+        // === LOGIQUE DE L'APPLICATION (JAVASCRIPT) ===
+
+        // 1. On récupère les notes sauvegardées dans le navigateur (localStorage)
+        // S'il n'y a rien, on initialise un tableau vide []
+        let notes = JSON.parse(localStorage.getItem('mesNotes')) || [];
+
+        // 2. Fonction pour afficher les notes à l'écran
+        function afficherNotes(notesAAfficher = notes) {
+            const container = document.getElementById('notesContainer');
+            container.innerHTML = ''; // On vide le conteneur avant de tout réafficher
+
+            notesAAfficher.forEach(note => {
+                const div = document.createElement('div');
+                div.className = 'note';
+                div.innerText = note;
+                container.appendChild(div); // On ajoute la note visuellement sur la page
+            });
+        }
+
+        // 3. Fonction pour ajouter une note
+        function ajouterNote() {
+            const input = document.getElementById('noteInput');
+            const texteNote = input.value.trim(); // .trim() enlève les espaces inutiles au début et à la fin
+
+            if(texteNote !== '') {
+                // La méthode unshift() ajoute l'élément à la PREMIÈRE place du tableau (index 0)
+                notes.unshift(texteNote); 
+                
+                // On sauvegarde le tableau mis à jour dans le navigateur
+                localStorage.setItem('mesNotes', JSON.stringify(notes));
+                
+                // On vide la zone de texte
+                input.value = '';
+                
+                // On rafraîchit l'affichage
+                afficherNotes();
+            }
+        }
+
+        // 4. Fonction pour la barre de recherche
+        function rechercherNotes() {
+            const requete = document.getElementById('searchBar').value.toLowerCase();
+            
+            // La méthode filter() crée un nouveau tableau avec uniquement les notes qui correspondent
+            const notesFiltrees = notes.filter(note => note.toLowerCase().includes(requete));
+            
+            // On affiche uniquement ce nouveau tableau filtré
+            afficherNotes(notesFiltrees);
+        }
+
+        // 5. Affichage initial au chargement de la page
+        afficherNotes();
+    </script>
+
+</body>
+</html>
